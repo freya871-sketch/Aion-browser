@@ -51,6 +51,9 @@
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
         
+        <!-- Particle Canvas -->
+        <canvas id="particle-canvas"></canvas>
+        
         <!-- UI -->
         <div id="game-ui">
             <!-- Gesundheits- und Manabalken -->
@@ -121,6 +124,14 @@
                     <div class="ability-icon heal"></div>
                     <div class="cooldown"></div>
                 </div>
+                <div class="ability" data-ability="mount" title="Mount">
+                    <div class="ability-icon mount"></div>
+                    <div class="cooldown"></div>
+                </div>
+                <div class="ability" data-ability="fly" title="Flugmodus">
+                    <div class="ability-icon fly"></div>
+                    <div class="cooldown"></div>
+                </div>
             </div>
             
             <!-- Target Info -->
@@ -137,6 +148,33 @@
             <div class="quest-log" id="quest-log">
                 <h3>Quests</h3>
                 <div class="quests" id="quests"></div>
+            </div>
+            
+            <!-- Day/Night Indicator -->
+            <div class="day-night-indicator" id="day-night-indicator">
+                <div class="time-icon" id="time-icon">☀️</div>
+                <span id="time-display">Tag</span>
+            </div>
+            
+            <!-- Weather Indicator -->
+            <div class="weather-indicator" id="weather-indicator">
+                <div class="weather-icon" id="weather-icon">☀️</div>
+                <span id="weather-display">Sonnig</span>
+            </div>
+            
+            <!-- Guild Indicator -->
+            <div class="guild-indicator" id="guild-indicator" style="display: none;">
+                <span id="guild-name">Gilde: Keine</span>
+            </div>
+            
+            <!-- PvP Arena Button -->
+            <div class="arena-button" id="arena-button">
+                <button id="enter-arena">Arena betreten</button>
+            </div>
+            
+            <!-- Dungeon Button -->
+            <div class="dungeon-button" id="dungeon-button">
+                <button id="enter-dungeon">Dungeon betreten</button>
             </div>
         </div>
         
@@ -180,15 +218,179 @@
                         <span>Gold:</span>
                         <span id="stat-gold">0</span>
                     </div>
+                    <div class="stat">
+                        <span>Fluglevel:</span>
+                        <span id="stat-fly-level">0</span>
+                    </div>
                 </div>
                 <div class="character-actions">
                     <button id="close-character">Schließen</button>
                 </div>
             </div>
         </div>
+        
+        <!-- Guild Screen -->
+        <div id="guild-screen">
+            <div class="guild-content">
+                <h2>Gilden-System</h2>
+                <div id="guild-info">
+                    <h3 id="guild-name-display">Keine Gilde</h3>
+                    <div class="guild-stats">
+                        <div class="stat">
+                            <span>Mitglieder:</span>
+                            <span id="guild-members">0</span>
+                        </div>
+                        <div class="stat">
+                            <span>Rang:</span>
+                            <span id="guild-rank">-</span>
+                        </div>
+                        <div class="stat">
+                            <span>Gilden-Gold:</span>
+                            <span id="guild-gold">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="guild-actions">
+                    <button id="create-guild">Gilde gründen</button>
+                    <button id="leave-guild" style="display: none;">Gilde verlassen</button>
+                    <button id="guild-chat">Gilden-Chat</button>
+                    <button id="close-guild">Schließen</button>
+                </div>
+                <div class="guild-list" id="guild-list">
+                    <h3>Gilden-Liste</h3>
+                    <div class="guilds" id="guilds"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Crafting Screen -->
+        <div id="crafting-screen">
+            <div class="crafting-content">
+                <h2>Handwerk</h2>
+                <div class="crafting-recipes" id="crafting-recipes">
+                    <!-- Recipes will be added here -->
+                </div>
+                <div class="crafting-actions">
+                    <button id="close-crafting">Schließen</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Arena Screen -->
+        <div id="arena-screen">
+            <div class="arena-content">
+                <h2>PvP Arena</h2>
+                <div class="arena-info">
+                    <h3>Willkommen in der Arena!</h3>
+                    <p>Kämpfe gegen andere Spieler in einem fairen Kampf.</p>
+                    <div class="arena-stats">
+                        <div class="stat">
+                            <span>Siege:</span>
+                            <span id="arena-wins">0</span>
+                        </div>
+                        <div class="stat">
+                            <span>Niederlagen:</span>
+                            <span id="arena-losses">0</span>
+                        </div>
+                        <div class="stat">
+                            <span>Rang:</span>
+                            <span id="arena-rank">Neuling</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="arena-actions">
+                    <button id="start-arena-fight">Kampf starten</button>
+                    <button id="leave-arena">Arena verlassen</button>
+                    <button id="close-arena">Schließen</button>
+                </div>
+                <div class="arena-opponents">
+                    <h3>Gegner wählen</h3>
+                    <div class="opponents" id="arena-opponents"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dungeon Screen -->
+        <div id="dungeon-screen">
+            <div class="dungeon-content">
+                <h2>Dungeons</h2>
+                <div class="dungeon-list" id="dungeon-list">
+                    <!-- Dungeons will be added here -->
+                </div>
+                <div class="dungeon-actions">
+                    <button id="close-dungeon">Schließen</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Screen -->
+        <div id="settings-screen">
+            <div class="settings-content">
+                <h2>Einstellungen</h2>
+                <div class="settings-section">
+                    <h3>Sound</h3>
+                    <div class="setting">
+                        <span>Hintergrundmusik:</span>
+                        <label class="switch">
+                            <input type="checkbox" id="music-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <span>Soundeffekte:</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sound-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <span>Lautstärke:</span>
+                        <input type="range" id="volume-slider" min="0" max="100" value="70">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Grafik</h3>
+                    <div class="setting">
+                        <span>Partikeleffekte:</span>
+                        <label class="switch">
+                            <input type="checkbox" id="particles-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting">
+                        <span>Sprites:</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sprites-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-actions">
+                    <button id="save-settings">Speichern</button>
+                    <button id="close-settings">Schließen</button>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- Background Music Audio Element -->
+    <audio id="background-music" loop>
+        <source src="" type="audio/mpeg">
+    </audio>
+
+    <!-- Sound Effects -->
+    <audio id="sound-jump" preload="auto"></audio>
+    <audio id="sound-attack" preload="auto"></audio>
+    <audio id="sound-heal" preload="auto"></audio>
+    <audio id="sound-damage" preload="auto"></audio>
+    <audio id="sound-levelup" preload="auto"></audio>
+    <audio id="sound-quest" preload="auto"></audio>
+    <audio id="sound-death" preload="auto"></audio>
+
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="sprites.js"></script>
+    <script src="particles.js"></script>
+    <script src="sounds.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
