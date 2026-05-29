@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AION Browser - MMORPG</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1>AION BROWSER</h1>
+            <p>Lade Spielwelt...</p>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-screen">
+        <div class="login-content">
+            <h1>AION BROWSER</h1>
+            <div class="character-select">
+                <h2>Wähle deine Klasse</h2>
+                <div class="classes">
+                    <div class="class-option" data-class="warrior">
+                        <div class="class-icon warrior"></div>
+                        <h3>Krieger</h3>
+                        <p>Starker Nahkämpfer</p>
+                    </div>
+                    <div class="class-option" data-class="mage">
+                        <div class="class-icon mage"></div>
+                        <h3>Magier</h3>
+                        <p>Mächtige Zauber</p>
+                    </div>
+                    <div class="class-option" data-class="archer">
+                        <div class="class-icon archer"></div>
+                        <h3>Bogenschütze</h3>
+                        <p>Schnelle Fernangriffe</p>
+                    </div>
+                </div>
+                <div class="name-input">
+                    <input type="text" id="player-name" placeholder="Dein Name" maxlength="15">
+                    <button id="start-game">Spiel starten</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <!-- UI -->
+        <div id="game-ui">
+            <!-- Gesundheits- und Manabalken -->
+            <div class="status-bars">
+                <div class="health-bar">
+                    <span>HP: </span>
+                    <div class="bar-container">
+                        <div class="bar health" id="health-bar"></div>
+                    </div>
+                    <span id="health-value">100/100</span>
+                </div>
+                <div class="mana-bar">
+                    <span>MP: </span>
+                    <div class="bar-container">
+                        <div class="bar mana" id="mana-bar"></div>
+                    </div>
+                    <span id="mana-value">100/100</span>
+                </div>
+                <div class="exp-bar">
+                    <span>XP: </span>
+                    <div class="bar-container">
+                        <div class="bar exp" id="exp-bar"></div>
+                    </div>
+                    <span id="exp-value">0/100</span>
+                </div>
+            </div>
+            
+            <!-- Spielerinfo -->
+            <div class="player-info">
+                <div id="player-name-display">Spieler</div>
+                <div id="player-level">Lv. 1</div>
+                <div id="player-class">Krieger</div>
+            </div>
+            
+            <!-- Minimap -->
+            <div class="minimap">
+                <canvas id="minimap-canvas" width="150" height="150"></canvas>
+            </div>
+            
+            <!-- Chat -->
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Nachricht eingeben..." maxlength="100">
+                    <button id="send-chat">Senden</button>
+                </div>
+            </div>
+            
+            <!-- Aktionsleiste -->
+            <div class="action-bar">
+                <div class="ability" data-ability="attack" title="Angriff">
+                    <div class="ability-icon attack"></div>
+                    <div class="cooldown"></div>
+                </div>
+                <div class="ability" data-ability="skill1" title="Fertigkeit 1">
+                    <div class="ability-icon skill1"></div>
+                    <div class="cooldown"></div>
+                </div>
+                <div class="ability" data-ability="skill2" title="Fertigkeit 2">
+                    <div class="ability-icon skill2"></div>
+                    <div class="cooldown"></div>
+                </div>
+                <div class="ability" data-ability="skill3" title="Fertigkeit 3">
+                    <div class="ability-icon skill3"></div>
+                    <div class="cooldown"></div>
+                </div>
+                <div class="ability" data-ability="heal" title="Heilen">
+                    <div class="ability-icon heal"></div>
+                    <div class="cooldown"></div>
+                </div>
+            </div>
+            
+            <!-- Target Info -->
+            <div class="target-info" id="target-info">
+                <div class="target-name">Ziel: Kein Ziel</div>
+                <div class="target-health">
+                    <div class="bar-container">
+                        <div class="bar health" id="target-health-bar"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quest Log -->
+            <div class="quest-log" id="quest-log">
+                <h3>Quests</h3>
+                <div class="quests" id="quests"></div>
+            </div>
+        </div>
+        
+        <!-- Inventar -->
+        <div id="inventory-screen">
+            <div class="inventory-content">
+                <h2>Inventar</h2>
+                <div class="inventory-grid" id="inventory-grid"></div>
+                <div class="inventory-actions">
+                    <button id="close-inventory">Schließen</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charakterinfo -->
+        <div id="character-screen">
+            <div class="character-content">
+                <h2>Charakter</h2>
+                <div class="character-stats">
+                    <div class="stat">
+                        <span>Stärke:</span>
+                        <span id="stat-strength">10</span>
+                    </div>
+                    <div class="stat">
+                        <span>Geschicklichkeit:</span>
+                        <span id="stat-dexterity">5</span>
+                    </div>
+                    <div class="stat">
+                        <span>Intelligenz:</span>
+                        <span id="stat-intelligence">5</span>
+                    </div>
+                    <div class="stat">
+                        <span>Angriff:</span>
+                        <span id="stat-attack">15</span>
+                    </div>
+                    <div class="stat">
+                        <span>Verteidigung:</span>
+                        <span id="stat-defense">10</span>
+                    </div>
+                    <div class="stat">
+                        <span>Gold:</span>
+                        <span id="stat-gold">0</span>
+                    </div>
+                </div>
+                <div class="character-actions">
+                    <button id="close-character">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
